@@ -115,9 +115,9 @@ export default function App() {
         <div className="feed-inner">
           {chats.length === 0 ? (
             <div className="welcome">
-              <div className="welcome-icon">
+              {/* <div className="welcome-icon">
                 <img src="/logoOrg.png" alt="Aequitas AI logo" className="brand-logo" />
-              </div>
+              </div> */}
               <h1>Compare AI Responses</h1>
               <p>Submit any question and instantly compare two AI solutions side-by-side, scored and evaluated by a neutral judge.</p>
               <div className="suggestions">
