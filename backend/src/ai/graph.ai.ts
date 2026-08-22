@@ -8,6 +8,8 @@ import {
 
 import { mistralAiModel, cohereAiModel, geminiAiModel } from "./models.ai.js";
 
+import { searchWeb } from "./search.ai.js";
+
 import { createAgent, HumanMessage, toolStrategy } from "langchain";
 import z from "zod";
 
@@ -17,6 +19,8 @@ import z from "zod";
 
 const state = new StateSchema({
   problem_statement: z.string().default(""),
+
+  web_search_context: z.string().default(""),
 
   solution_1: z.string().default(""),
 
@@ -34,13 +38,40 @@ const state = new StateSchema({
 });
 
 // =======================
+// SEARCH NODE
+// =======================
+
+const searchNode: GraphNode<typeof state> = async (state) => {
+  const webSearchContext = await searchWeb(state.problem_statement);
+
+  return {
+    web_search_context: webSearchContext,
+  };
+};
+
+// =======================
 // SOLUTION NODE
 // =======================
 
 const solutionNode: GraphNode<typeof state> = async (state) => {
+  const prompt = `
+Answer the following problem statement clearly and completely.
+
+<problem_statement>
+${state.problem_statement}
+</problem_statement>
+
+${state.web_search_context
+    ? `
+<web_search_context>
+Latest information gathered from the web. Use it to ground your answer, especially for current affairs and recent developments:
+${state.web_search_context}
+</web_search_context>`
+    : ""}`;
+
   const [mistralResponse, cohereResponse] = await Promise.all([
-    mistralAiModel.invoke(state.problem_statement),
-    cohereAiModel.invoke(state.problem_statement),
+    mistralAiModel.invoke(prompt),
+    cohereAiModel.invoke(prompt),
   ]);
 
   return {
@@ -106,6 +137,14 @@ Be strict while scoring.
 ${state.problem_statement}
 </problem_statement>
 
+${state.web_search_context
+        ? `
+<web_search_context>
+Ground truth gathered from the web. Cross-check both solutions against it, especially for current affairs:
+${state.web_search_context}
+</web_search_context>`
+        : ""}
+
 <solution_1>
 ${state.solution_1}
 </solution_1>
@@ -127,10 +166,12 @@ ${state.solution_2}
 // =======================
 
 const graph = new StateGraph(state)
+  .addNode("search", searchNode)
   .addNode("solution", solutionNode)
   .addNode("judgeME", judgeNode)
 
-  .addEdge(START, "solution")
+  .addEdge(START, "search")
+  .addEdge("search", "solution")
   .addEdge("solution", "judgeME")
   .addEdge("judgeME", END)
 

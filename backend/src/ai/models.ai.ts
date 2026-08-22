@@ -4,12 +4,12 @@ import { ChatCohere } from "@langchain/cohere";
 import config from "../config/config.js";
 
 export const geminiAiModel = new ChatGoogleGenerativeAI({
-    model: "gemini-3.6-flash",
+    model: "gemini-3.5-flash",
     apiKey: config.GOOGLE_API_KEY,
 });
 
 export const mistralAiModel = new ChatMistralAI({
-    model: "mistral-medium",
+    model: "mistral-large-latest",
     apiKey: config.MISTRAL_API_KEY,
 });
 

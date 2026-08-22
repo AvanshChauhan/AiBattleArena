@@ -604,3 +604,52 @@ body {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* ── User chip (navbar) ───────────────────────── */
+.user-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 3px 3px 10px;
+  border-radius: 9999px;
+  background: var(--surface-sub);
+  border: 1px solid var(--border);
+}
+.user-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.user-name {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--txt-2);
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.btn-logout {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: var(--surface);
+  color: var(--txt-3);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.btn-logout svg { width: 12px; height: 12px; stroke: currentColor; }
+.btn-logout:hover { color: #ef4444; background: rgba(239,68,68,.08); }
+.btn-logout:active { transform: scale(.93); }
+
