@@ -12,11 +12,13 @@ const router = Router();
 const SALT_ROUNDS = 10;
 const COOKIE_NAME = "refreshToken";
 
-// Cookie options — httpOnly so JS can't read it, sameSite lax for local dev
+// Cookie options — httpOnly so JS can't read it.
+// In production with cross-origin (Vercel -> Render), sameSite must be "none" and secure must be true.
+const isProd = process.env.NODE_ENV === "production";
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  sameSite: "lax" as const,
-  secure: process.env.NODE_ENV === "production", // HTTPS only in prod
+  sameSite: (isProd ? "none" : "lax") as "none" | "lax",
+  secure: isProd, // Required when sameSite is "none"
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in ms
   path: "/",
 };
