@@ -4,6 +4,8 @@ A full-stack AI evaluation platform that pits two leading LLMs against each othe
 
 Now featuring an **Apple (iOS / iPhone) inspired glassmorphic UI**, **MongoDB session persistence**, and a **secure dual-token JWT authentication system with `httpOnly` cookies**.
 
+🌐 **Live Backend API**: `https://aibattlearena-j8lm.onrender.com`
+
 ---
 
 ## 📸 Features

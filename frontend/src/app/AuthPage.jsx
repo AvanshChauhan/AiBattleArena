@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import './AuthPage.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
 const AUTH_URL = {
-  login: '/auth/login',
-  register: '/auth/register',
+  login: `${API_BASE}/auth/login`,
+  register: `${API_BASE}/auth/register`,
 };
 
 export default function AuthPage({ onSuccess, theme: initialTheme = 'dark' }) {

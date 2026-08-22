@@ -9,11 +9,12 @@ import AuthPage from './AuthPage.jsx';
 let memoryToken = localStorage.getItem('aq-token') || '';
 
 // ─── API helpers ──────────────────────────────────────────────────────────────
-const API_URL = '/api/compare';
+const API_BASE = import.meta.env.VITE_API_URL || '';
+const API_URL = `${API_BASE}/api/compare`;
 
 /** Silently get a new access token using the httpOnly refresh token cookie */
 async function refreshAccessToken() {
-  const res = await fetch('/auth/refresh', {
+  const res = await fetch(`${API_BASE}/auth/refresh`, {
     method: 'POST',
     credentials: 'include', // browser sends the httpOnly cookie automatically
   });
@@ -126,7 +127,7 @@ export default function App() {
 
   const handleLogout = useCallback(async () => {
     // Tell the server to delete the refresh token from DB and clear cookie
-    await fetch('/auth/logout', {
+    await fetch(`${API_BASE}/auth/logout`, {
       method: 'POST',
       credentials: 'include',
     }).catch(console.error);
